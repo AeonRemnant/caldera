@@ -1,0 +1,148 @@
+// Prefer server-side borders/focus rings drawn around windows,
+// avoids borders "shining through" semitransparent clients.
+prefer-no-csd
+
+// Save screenshots to ~/screenshots/
+screenshot-path "~/screenshots/Screenshot %Y-%m-%d %H-%M-%S.png"
+
+// Input and keyboard
+input {
+  focus-follows-mouse
+  warp-mouse-to-focus
+
+  mouse {
+    accel-speed -0.65
+    accel-profile "flat"
+  }
+
+  touchpad {
+    tap
+    natural-scroll
+    dwt // disable while typing
+  }
+
+  keyboard {
+    xkb {
+      layout "us"
+    }
+  }
+}
+
+// Laptop display — adjust mode after first boot with: niri msg outputs
+output "eDP-1" {
+  scale 1.0
+}
+
+// Workspaces (laptop single-output)
+workspace "1" {}
+workspace "2" {}
+workspace "3" {}
+workspace "4" {}
+workspace "5" {}
+
+// XWayland support (Niri has no built-in XWayland)
+environment {
+  DISPLAY ":0"
+}
+spawn-at-startup "xwayland-satellite"
+
+// Startup applications
+spawn-at-startup "/run/current-system/sw/libexec/polkit-gnome-authentication-agent-1"
+spawn-at-startup "mako"
+// Wallpaper — drop your wallpaper into dotfiles/niri/wallpapers/
+spawn-sh-at-startup "pkill -x swaybg 2>/dev/null; exec swaybg -m fill -i $HOME/.config/niri/wallpapers/default.jpg"
+
+// Layout
+layout {
+  gaps 10
+
+  border {
+    width 2
+    active-gradient from="#fc03f0" to="#5300a1" angle=45
+    inactive-color "#120121"
+    urgent-color "#ff4d4d"
+  }
+
+  focus-ring {
+    width 2
+    active-gradient from="#fc03f0" to="#5300a1" angle=45
+    inactive-color "#120121"
+  }
+
+  tab-indicator {
+    width 6
+    gap 6
+    position "top"
+  }
+}
+
+// Round all window corners and clip client-side shadows
+window-rule {
+  geometry-corner-radius 12
+  clip-to-geometry true
+}
+
+// Binds
+binds {
+  // Launcher / terminal
+  Super+Space { spawn "vicinae" "toggle"; }
+  Super+Z { spawn "alacritty"; }
+
+  // Fullscreen toggle
+  Super+F { fullscreen-window; }
+
+  // Focus navigation
+  Super+Left { focus-column-left; }
+  Super+Right { focus-column-right; }
+  Super+Up { focus-window-or-workspace-up; }
+  Super+Down { focus-window-or-workspace-down; }
+  Super+WheelScrollUp cooldown-ms=120 { focus-workspace-up; }
+  Super+WheelScrollDown cooldown-ms=120 { focus-workspace-down; }
+
+  // Move windows
+  Super+Alt+Left { move-column-left; }
+  Super+Alt+Right { move-column-right; }
+  Super+Alt+Up { move-window-to-workspace-up; }
+  Super+Alt+Down { move-window-to-workspace-down; }
+
+  // Close window
+  Super+Q { close-window; }
+
+  // Workspaces
+  Super+1 { focus-workspace "1"; }
+  Super+2 { focus-workspace "2"; }
+  Super+3 { focus-workspace "3"; }
+  Super+4 { focus-workspace "4"; }
+  Super+5 { focus-workspace "5"; }
+
+  Super+Shift+1 { move-window-to-workspace "1"; }
+  Super+Shift+2 { move-window-to-workspace "2"; }
+  Super+Shift+3 { move-window-to-workspace "3"; }
+  Super+Shift+4 { move-window-to-workspace "4"; }
+  Super+Shift+5 { move-window-to-workspace "5"; }
+
+  Ctrl+Alt+1 { focus-workspace "1"; }
+  Ctrl+Alt+2 { focus-workspace "2"; }
+  Ctrl+Alt+3 { focus-workspace "3"; }
+  Ctrl+Alt+4 { focus-workspace "4"; }
+  Ctrl+Alt+5 { focus-workspace "5"; }
+
+  Ctrl+Alt+Shift+1 { move-window-to-workspace "1"; }
+  Ctrl+Alt+Shift+2 { move-window-to-workspace "2"; }
+  Ctrl+Alt+Shift+3 { move-window-to-workspace "3"; }
+  Ctrl+Alt+Shift+4 { move-window-to-workspace "4"; }
+  Ctrl+Alt+Shift+5 { move-window-to-workspace "5"; }
+
+  // Screenshots
+  Super+X { spawn-sh "grim -g \"$(slurp)\" - | wl-copy"; }
+  Super+Alt+X { spawn-sh "mkdir -p ~/Screenshots && grim -g \"$(slurp)\" ~/Screenshots/\"Screenshot $(date +%Y-%m-%d_%H-%M-%S).png\""; }
+
+  // Overview
+  Super+Tab { toggle-overview; }
+
+  // Media controls
+  XF86AudioPlay  allow-when-locked=true { spawn "playerctl" "play-pause"; }
+  XF86AudioStop  allow-when-locked=true { spawn "playerctl" "stop"; }
+  XF86AudioPrev  allow-when-locked=true { spawn "playerctl" "previous"; }
+  XF86AudioNext  allow-when-locked=true { spawn "playerctl" "next"; }
+}

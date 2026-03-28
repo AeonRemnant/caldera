@@ -1,0 +1,65 @@
+========================================
+  Caldera Installation Guide
+========================================
+
+PREREQUISITES
+─────────────
+- 1 NVMe drive (~250GB)
+- Internet connection (ethernet recommended, or use nmtui for WiFi)
+
+COMMANDS
+────────
+caldera-install     Run the guided installer (recommended)
+caldera-wipe        Wipe NVMe drives clean before installing
+docs                Show this guide
+lsblk               List block devices
+nmtui               Configure WiFi if needed
+
+WHAT THE INSTALLER DOES
+───────────────────────
+Step 1: Identify your NVMe drive by /dev/disk/by-id/ path
+Step 2: Partition the drive with disko:
+        - ESP (512MB): vfat, mounted at /boot
+        - BTRFS (rest): @root, @nix, @home, @log, @swap (8GB)
+Step 3: Install NixOS from the embedded flake (pre-cached, mostly offline)
+Step 4: Place the flake at ~/.config/caldera for future rebuilds
+
+DISK LAYOUT
+───────────
+/              BTRFS @root (persistent)
+/boot          ESP (vfat)
+/nix           BTRFS @nix (nix store)
+/home          BTRFS @home (user data)
+/var/log       BTRFS @log (system logs)
+/swap          BTRFS @swap (8GB swapfile)
+
+SYSTEM
+──────
+Boot manager:  Limine (5 generations max)
+Window manager: Niri (Wayland)
+Launcher:      Vicinae
+Browsers:      Zen Browser, Firefox
+3D Printing:   Klipper + Moonraker + Mainsail
+Web UI:        http://mainsail.caldera.lab (via Caddy)
+
+AFTER FIRST BOOT
+────────────────
+- Login as elyria (password: caldera — change immediately with passwd)
+- regreet greeter defaults to Niri session
+- The flake lives at ~/.config/caldera
+- Rebuild the system: rebuild
+- Upgrade flake inputs: upgrade
+- Mainsail is available at http://mainsail.caldera.lab
+- Configure Klipper: edit /var/lib/klipper/printer.cfg or use Mainsail
+- Verify GPU bus IDs if NVIDIA offload doesn't work:
+  lspci | grep -E 'VGA|3D'
+  Then update shards/system/drivers.nix and rebuild
+
+TROUBLESHOOTING
+───────────────
+- No NVMe drives shown?  Check BIOS for NVMe mode (not RAID)
+- Disko fails?           Verify disk IDs with: ls /dev/disk/by-id/
+- Boot fails after install?  Check BIOS boot order for the ESP
+- NVIDIA issues?         Verify prime bus IDs match your hardware
+- Mainsail unreachable?  Check: systemctl status caddy moonraker klipper
+========================================
