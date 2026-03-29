@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   domain = "mainsail.${config.caldera.hostname}.lab";
@@ -10,5 +10,5 @@ in
   };
 
   # Serve Mainsail for any Host header (IP access, mDNS, etc.)
-  services.nginx.virtualHosts.${domain}.default = true;
+  services.nginx.virtualHosts.${domain}.default = lib.mkForce true;
 }

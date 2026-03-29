@@ -101,7 +101,7 @@
 
       secretsFile = lib.mkOption {
         type = lib.types.path;
-        default = ../../secrets/wifi.yaml;
+        default = ../secrets/wifi.yaml;
         description = "Path to sops-encrypted WiFi credentials file.";
       };
     };
