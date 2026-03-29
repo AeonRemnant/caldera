@@ -3,27 +3,36 @@ def --env rebuild [--unclean] {
   # Authenticate early so sudo session persists through the whole rebuild
   sudo true
 
-  echo "Changing directory to ~/.config/caldera"
-  cd ~/.config/caldera
+  echo "Changing directory to /config"
+  cd /config
 
   if $unclean {
     echo "Rebuilding without safety checks (unclean mode)..."
   } else {
     echo "Pulling git updates..."
-    git pull
+    try { git pull } catch {
+      # First pull has unrelated histories — force sync to remote
+      print "Syncing with remote..."
+      try {
+        git fetch origin
+        git reset --hard origin/main
+      } catch {
+        print "WARNING: git sync failed, rebuilding with local state"
+      }
+    }
 
     echo "Running safety checks..."
     just check
   }
 
   echo "> Building NixOS configuration"
-  sudo nixos-rebuild switch --flake . o+e>| nom
+  sudo nixos-rebuild switch --flake .#caldera o+e>| nom
 }
 
 # Update flake
 def --env upgrade [] {
-  echo "Switching to ~/.config/caldera"
-  cd ~/.config/caldera
+  echo "Switching to /config"
+  cd /config
 
   echo "Upgrading flake..."
   nix flake update
@@ -58,6 +67,7 @@ export def --env clean [arg?: string] {
   }
 
   print $"Cleaning all profiles, keeping last ($keep) generations..."
-  sudo nix-collect-garbage --delete-older-than "${keep}d"
-  sudo nixos-rebuild boot --flake .
+  sudo nix-collect-garbage --delete-older-than $"($keep)d"
+  cd /config
+  sudo nixos-rebuild boot --flake .#caldera
 }

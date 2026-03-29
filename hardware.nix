@@ -15,7 +15,6 @@
 
   boot = {
     initrd.availableKernelModules = [
-      "nvme"
       "xhci_pci"
       "ahci"
       "usbhid"
@@ -27,7 +26,7 @@
     extraModulePackages = [ ];
   };
 
-  # Filesystem and swap are managed by disko (see shards/system/disks.nix)
+  # Filesystem mounts use disk labels and are defined in shards/system/disks.nix.
 
   networking.useDHCP = lib.mkDefault true;
 

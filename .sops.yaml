@@ -1,0 +1,7 @@
+keys:
+  - &caldera age19uwj7txc7lru2ly79n0jgdk8thp57px8gsv3aaulwusewcg8dvgszkl98j
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *caldera

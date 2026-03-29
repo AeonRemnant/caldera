@@ -5,9 +5,9 @@ echo "  Caldera Drive Wiper"
 echo "========================================"
 echo ""
 
-# Find NVMe drives (not partitions, not eui aliases)
-mapfile -t NVME_IDS < <(
-	for f in /dev/disk/by-id/nvme-*; do
+# Find SATA and NVMe drives (not partitions, not eui aliases)
+mapfile -t DISK_IDS < <(
+	for f in /dev/disk/by-id/ata-* /dev/disk/by-id/nvme-*; do
 		[ -e "$f" ] || continue
 		name=$(basename "$f")
 		[[ $name == *part[0-9]* ]] && continue
@@ -16,15 +16,15 @@ mapfile -t NVME_IDS < <(
 	done | sort
 )
 
-if [ ${#NVME_IDS[@]} -eq 0 ]; then
-	echo "No NVMe drives found."
+if [ ${#DISK_IDS[@]} -eq 0 ]; then
+	echo "No drives found."
 	exit 1
 fi
 
-echo "Available NVMe drives:"
+echo "Available drives:"
 echo ""
-for i in "${!NVME_IDS[@]}"; do
-	ID="${NVME_IDS[$i]}"
+for i in "${!DISK_IDS[@]}"; do
+	ID="${DISK_IDS[$i]}"
 	DEV=$(readlink -f "/dev/disk/by-id/$ID")
 	SIZE=$(lsblk -dno SIZE "$DEV" 2>/dev/null || echo "?")
 	MODEL=$(lsblk -dno MODEL "$DEV" 2>/dev/null || echo "?")
@@ -38,13 +38,13 @@ read -rp "> " SELECTION
 
 TARGETS=()
 if [ "$SELECTION" = "all" ]; then
-	TARGETS=("${NVME_IDS[@]}")
+	TARGETS=("${DISK_IDS[@]}")
 else
 	read -ra NUMS <<<"$SELECTION"
 	for num in "${NUMS[@]}"; do
 		idx=$((num - 1))
-		if [ "$idx" -ge 0 ] && [ "$idx" -lt "${#NVME_IDS[@]}" ]; then
-			TARGETS+=("${NVME_IDS[$idx]}")
+		if [ "$idx" -ge 0 ] && [ "$idx" -lt "${#DISK_IDS[@]}" ]; then
+			TARGETS+=("${DISK_IDS[$idx]}")
 		else
 			echo "Invalid selection: $num"
 			exit 1

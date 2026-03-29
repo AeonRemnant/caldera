@@ -13,8 +13,7 @@ in
     firewall = {
       enable = true;
       allowedTCPPorts = [
-        80 # Caddy (Mainsail)
-        7125 # Moonraker API
+        80 # Nginx (Mainsail)
       ];
     };
     # Local DNS for mainsail.<hostname>.lab

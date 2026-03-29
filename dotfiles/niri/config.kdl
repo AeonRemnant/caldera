@@ -86,7 +86,7 @@ window-rule {
 binds {
   // Launcher / terminal
   Super+Space { spawn "vicinae" "toggle"; }
-  Super+Z { spawn "alacritty"; }
+  Super+Z { spawn "ghostty"; }
 
   // Fullscreen toggle
   Super+F { fullscreen-window; }

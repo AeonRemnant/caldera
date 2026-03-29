@@ -22,8 +22,8 @@
     };
 
     # === System ===
-    disko = {
-      url = "github:nix-community/disko";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

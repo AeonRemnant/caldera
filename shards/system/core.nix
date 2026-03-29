@@ -45,7 +45,7 @@
       enable = true;
       extraArgs = "--keep 5 --keep-since 3d";
     };
-    flake = "/home/${config.caldera.user.login}/.config/caldera";
+    flake = "/config";
   };
 
   # === Base System Configuration ===
@@ -65,9 +65,15 @@
       unzip
       jq
       upower
-      alacritty
+      ghostty
     ];
   };
+
+  # Allow root (nixos-rebuild) to access the operator-owned /config repo
+  environment.etc."gitconfig".text = ''
+    [safe]
+      directory = /config
+  '';
 
   services = {
     dbus.enable = true;

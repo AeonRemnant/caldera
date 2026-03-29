@@ -4,11 +4,11 @@
     stateVersion = "25.11";
 
     user = {
-      login = "elyria";
-      name = "Elyria";
+      login = "operator";
+      name = "Operator";
       git = {
-        name = "SylvaraTheDev";
-        email = "wing@elyria.dev";
+        name = "operator";
+        email = "operator@caldera.local";
       };
       groups = [
         "networkmanager"
@@ -23,8 +23,7 @@
     locale = "en_AU.UTF-8";
     gpu = "nvidia";
 
-    disk = "/dev/disk/by-id/REPLACE-WITH-NVME-ID";
-    swapSize = "8G";
+    wifi.enable = true;
 
     printer = {
       serial = "/dev/ttyUSB0";

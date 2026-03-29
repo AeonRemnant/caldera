@@ -71,14 +71,9 @@
     };
 
     disk = lib.mkOption {
-      type = lib.types.strMatching "/dev/disk/by-id/.*";
-      description = "Device path (by-id) for the NVMe drive.";
-    };
-
-    swapSize = lib.mkOption {
       type = lib.types.str;
-      default = "8G";
-      description = "Size of the swapfile.";
+      default = "";
+      description = "Original target drive path (reference only, not used at runtime).";
     };
 
     dotfilesDir = lib.mkOption {
@@ -98,6 +93,16 @@
         type = lib.types.str;
         default = "/var/lib/klipper";
         description = "Mutable directory for Klipper config (printer.cfg).";
+      };
+    };
+
+    wifi = {
+      enable = lib.mkEnableOption "encrypted WiFi credentials via sops-nix";
+
+      secretsFile = lib.mkOption {
+        type = lib.types.path;
+        default = ../../secrets/wifi.yaml;
+        description = "Path to sops-encrypted WiFi credentials file.";
       };
     };
   };

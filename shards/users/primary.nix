@@ -16,7 +16,7 @@ in
     shell = pkgs.nushell;
     ignoreShellProgramCheck = true;
     # Set password on first login: passwd
-    initialPassword = "caldera";
+    initialPassword = "1142";
   };
 
   home-manager.users.${user.login} = _: {

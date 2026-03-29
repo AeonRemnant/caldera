@@ -141,11 +141,60 @@ in
       };
 
       pause_resume = { };
+      display_status = { };
+
+      # Macros expected by Mainsail UI buttons
+      "gcode_macro PAUSE" = {
+        description = "Pause the current print";
+        rename_existing = "BASE_PAUSE";
+        gcode = ''
+          {% set z = params.Z|default(10)|float %}
+          {% set e = params.E|default(1.7)|float %}
+          SAVE_GCODE_STATE NAME=PAUSE_state
+          BASE_PAUSE
+          G91
+          G1 E-{e} F2100
+          G1 Z{z}
+          G90
+          G1 X5 Y220 F6000
+        '';
+      };
+
+      "gcode_macro RESUME" = {
+        description = "Resume the current print";
+        rename_existing = "BASE_RESUME";
+        gcode = ''
+          {% set e = params.E|default(1.7)|float %}
+          G91
+          G1 E{e} F2100
+          G90
+          RESTORE_GCODE_STATE NAME=PAUSE_state MOVE=1
+          BASE_RESUME
+        '';
+      };
+
+      "gcode_macro CANCEL_PRINT" = {
+        description = "Cancel the current print";
+        rename_existing = "BASE_CANCEL_PRINT";
+        gcode = ''
+          TURN_OFF_HEATERS
+          G91
+          G1 Z5
+          G90
+          G1 X5 Y220 F6000
+          M84
+          BASE_CANCEL_PRINT
+        '';
+      };
     };
   };
 
+  # Klipper needs dialout for serial port access
+  users.users.klipper.extraGroups = [ "dialout" ];
+
   # Ensure gcode upload directory exists
   systemd.tmpfiles.rules = [
+    "d ${cfg.configDir} 0755 klipper klipper -"
     "d ${cfg.configDir}/gcodes 0755 klipper klipper -"
   ];
 }

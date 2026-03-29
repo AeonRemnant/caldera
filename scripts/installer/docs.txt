@@ -4,20 +4,20 @@
 
 PREREQUISITES
 ─────────────
-- 1 NVMe drive (~250GB)
+- 1 SATA or NVMe drive (~250GB)
 - Internet connection (ethernet recommended, or use nmtui for WiFi)
 
 COMMANDS
 ────────
 caldera-install     Run the guided installer (recommended)
-caldera-wipe        Wipe NVMe drives clean before installing
+caldera-wipe        Wipe drives clean before installing
 docs                Show this guide
 lsblk               List block devices
 nmtui               Configure WiFi if needed
 
 WHAT THE INSTALLER DOES
 ───────────────────────
-Step 1: Identify your NVMe drive by /dev/disk/by-id/ path
+Step 1: Identify your drive by /dev/disk/by-id/ path
 Step 2: Partition the drive with disko:
         - ESP (512MB): vfat, mounted at /boot
         - BTRFS (rest): @root, @nix, @home, @log, @swap (8GB)
@@ -44,7 +44,7 @@ Web UI:        http://mainsail.caldera.lab (via Caddy)
 
 AFTER FIRST BOOT
 ────────────────
-- Login as elyria (password: caldera — change immediately with passwd)
+- Login as operator (password: 1142 — change immediately with passwd)
 - regreet greeter defaults to Niri session
 - The flake lives at ~/.config/caldera
 - Rebuild the system: rebuild
@@ -57,7 +57,7 @@ AFTER FIRST BOOT
 
 TROUBLESHOOTING
 ───────────────
-- No NVMe drives shown?  Check BIOS for NVMe mode (not RAID)
+- No drives shown?        Check BIOS — ensure SATA/AHCI mode (not RAID)
 - Disko fails?           Verify disk IDs with: ls /dev/disk/by-id/
 - Boot fails after install?  Check BIOS boot order for the ESP
 - NVIDIA issues?         Verify prime bus IDs match your hardware
