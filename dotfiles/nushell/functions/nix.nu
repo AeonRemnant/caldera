@@ -1,8 +1,5 @@
 # Rebuild NixOS
 def --env rebuild [--unclean] {
-  # Authenticate early so sudo session persists through the whole rebuild
-  sudo true
-
   echo "Changing directory to /config"
   cd /config
 
@@ -26,7 +23,7 @@ def --env rebuild [--unclean] {
   }
 
   echo "> Building NixOS configuration"
-  sudo nixos-rebuild switch --flake .#caldera o+e>| nom
+  nh os switch /config
 }
 
 # Update flake
@@ -68,6 +65,5 @@ export def --env clean [arg?: string] {
 
   print $"Cleaning all profiles, keeping last ($keep) generations..."
   sudo nix-collect-garbage --delete-older-than $"($keep)d"
-  cd /config
-  sudo nixos-rebuild boot --flake .#caldera
+  nh os boot /config
 }
