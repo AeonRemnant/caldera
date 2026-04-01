@@ -393,6 +393,6 @@ in
   # Ensure gcode upload directory exists
   systemd.tmpfiles.rules = [
     "d ${cfg.configDir} 0755 klipper klipper -"
-    "d ${cfg.configDir}/gcodes 0755 klipper klipper -"
+    "d ${cfg.configDir}/gcodes 0775 klipper klipper -"
   ];
 }
