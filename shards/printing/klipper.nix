@@ -390,9 +390,11 @@ in
   };
   users.groups.klipper = { };
 
-  # Ensure gcode upload directory exists
+  # Ensure gcode upload directory exists and moonraker can find it.
+  # Moonraker uploads to <its data dir>/gcodes but klipper reads from configDir/gcodes.
   systemd.tmpfiles.rules = [
     "d ${cfg.configDir} 0755 klipper klipper -"
     "d ${cfg.configDir}/gcodes 0775 klipper klipper -"
+    "L+ /var/lib/moonraker/gcodes - - - - ${cfg.configDir}/gcodes"
   ];
 }

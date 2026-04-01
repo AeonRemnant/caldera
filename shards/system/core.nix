@@ -58,6 +58,7 @@
     systemPackages = with pkgs; [
       coreutils-full
       git
+      just
       wget
       tree
       btrfs-progs
@@ -69,7 +70,7 @@
     ];
   };
 
-  # Allow root (nixos-rebuild) to access the operator-owned /config repo
+  # Allow root (nixos-rebuild) and all users to access the /config repo
   environment.etc."gitconfig".text = ''
     [safe]
       directory = /config
