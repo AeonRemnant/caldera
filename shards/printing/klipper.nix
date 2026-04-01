@@ -160,22 +160,6 @@ in
         adaptive_margin = 5;
       };
 
-      # --- Screw Tilt Adjust (manual bed tramming aid) ---
-
-      screws_tilt_adjust = {
-        screw1 = "54.5,45.5";
-        screw1_name = "front left screw";
-        screw2 = "224.5,45.5";
-        screw2_name = "front right screw";
-        screw3 = "224.5,215.5";
-        screw3_name = "rear right screw";
-        screw4 = "54.5,215.5";
-        screw4_name = "rear left screw";
-        horizontal_move_z = "10.0";
-        speed = "50.0";
-        screw_thread = "CCW-M4";
-      };
-
       # --- Sensors ---
 
       "temperature_sensor mcu_temp" = {
