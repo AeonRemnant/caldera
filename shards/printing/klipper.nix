@@ -189,7 +189,7 @@ in
       # --- Features ---
 
       virtual_sdcard = {
-        path = "${cfg.configDir}/gcodes";
+        path = "/var/lib/moonraker/gcodes";
         on_error_gcode = "CANCEL_PRINT";
       };
 
@@ -390,11 +390,10 @@ in
   };
   users.groups.klipper = { };
 
-  # Ensure gcode upload directory exists and moonraker can find it.
-  # Moonraker uploads to <its data dir>/gcodes but klipper reads from configDir/gcodes.
+  # Klipper config directory and shared gcodes directory.
+  # Both klipper and moonraker use /var/lib/moonraker/gcodes directly.
   systemd.tmpfiles.rules = [
     "d ${cfg.configDir} 0755 klipper klipper -"
-    "d ${cfg.configDir}/gcodes 0775 klipper klipper -"
-    "L+ /var/lib/moonraker/gcodes - - - - ${cfg.configDir}/gcodes"
+    "d /var/lib/moonraker/gcodes 0775 moonraker klipper -"
   ];
 }

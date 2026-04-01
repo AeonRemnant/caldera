@@ -10,9 +10,6 @@
     port = 7125;
     group = "klipper";
     settings = {
-      # NixOS manages config immutably — disable moonraker's config validation
-      # to prevent it from globally disabling write access (including uploads).
-      machine.validate_config = false;
       authorization = {
         cors_domains = [
           "http://mainsail.${config.caldera.hostname}.lab"
