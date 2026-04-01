@@ -394,6 +394,6 @@ in
   # Both klipper and moonraker use /var/lib/moonraker/gcodes directly.
   systemd.tmpfiles.rules = [
     "d ${cfg.configDir} 0755 klipper klipper -"
-    "d /var/lib/moonraker/gcodes 0775 moonraker klipper -"
+    "d /var/lib/moonraker/gcodes 2775 moonraker klipper -"
   ];
 }
